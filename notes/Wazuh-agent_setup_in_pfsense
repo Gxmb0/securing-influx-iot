@@ -1,0 +1,31 @@
+Wazuh-agent setup in pfsense
+
+Excellent — wazuh-agent 4.14.6 installed cleanly. Now follow the post-install steps it printed:
+
+1. Copy timezone file:
+
+#sh
+#cp /etc/localtime /var/ossec/etc
+
+#2. Set up the config file:
+
+#sh
+#cp /var/ossec/etc/ossec.conf.sample /var/ossec/etc/ossec.conf
+
+#3. Edit ossec.conf to point at your Wazuh manager. Open it and find the <server> block under <client>:
+
+#sh
+#cat /var/ossec/etc/ossec.conf | grep -A3 "<server>"
+
+#We'll need to set the address to siem machine ip addr - 192.168.30.10. Since multi-line edits are tricky in this shell, use sed for a targeted replace once we see the current placeholder text (paste that grep output).
+
+#4. Set up client keys file:
+
+#sh
+#mv /var/ossec/etc/client.keys.sample /var/ossec/etc/client.keys
+
+#5. Enable and start:
+
+#sh
+#sysrc wazuh_agent_enable="YES"
+#service wazuh-agent start
