@@ -1,0 +1,18 @@
+# Custom Suricata rules developed for this project.
+# Deployed via pfSense: Services -> Suricata -> OPT1 -> Rules -> Custom
+# See REMEDIATION.md for full rationale, deployment steps, and before/after evidence.
+
+# Rule 1 — MQTT unauthorized connection attempt.
+# Matches the MQTT CONNECT control packet type byte (0x10) arriving at the
+# broker's port. Confirmed effective — see FINDINGS.md test #9.
+alert tcp any any -> 192.168.30.20 1883 (msg:"CUSTOM Unauthorized MQTT Connection Attempt"; flow:to_server,established; content:"|10|"; offset:0; depth:1; sid:9000001; rev:1;)
+
+# Rule 2 — Telnet rapid brute-force pattern (login timeout).
+# Content match derived directly from a tcpdump capture of BusyBox telnetd's
+# actual behavior under an automated brute-force attempt (it does not send a
+# standard login prompt in this scenario; it sends this literal message
+# before tearing down the connection). Deployed and confirmed enabled, but
+# did NOT fire even against confirmed-live logging. Left in place as a
+# documented, unresolved false negative — see FINDINGS.md test #10 and
+# REMEDIATION.md section 3 for the full investigation.
+alert tcp any any -> 192.168.30.20 2323 (msg:"CUSTOM Telnet Rapid Brute-Force Pattern (Login Timeout)"; flow:to_client,established; content:"Login timed out"; sid:9000002; rev:2;)
