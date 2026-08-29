@@ -1,0 +1,22 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Credential/wordlist files generated during testing — do not commit real
+# or reused credentials, even lab ones, as a matter of good practice
+creds.txt
+*.pcap
+*.pcapng
+
+# Large raw log exports (keep summarized excerpts in FINDINGS.md instead)
+notes/*.log
+notes/eve.json*
+notes/*.json
+
+# VM/hypervisor artifacts, in case any get copied in accidentally
+*.vmdk
+*.vmx
+*.vmsn
+*.nvram
